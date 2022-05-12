@@ -1,4 +1,4 @@
-# Discord RSS
+# Discord RSS - Improve
 Send new RSS feed entries to discord via a webhook. 
 For PTT RSS 
 
@@ -70,7 +70,7 @@ The following relation table is for reference.
 |`https://www.ptt.cc/atom/PC_Shopping.xml`|`https://discord.com/api/webhooks/...AccountidA`|
 |`https://www.ptt.cc/atom/HardwareSale.xml`|`https://discord.com/api/webhooks/...Accountidb`|
 
-#### line 67
+#### line 53
 Change webhook post content to your style
 >修改 webhook 傳送內容成你的風格
 
