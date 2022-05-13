@@ -26,7 +26,7 @@ this script run main.py 5 seconds again
 
 ### Modify main.py 
 
-#### line 10 & line 13
+#### line 6 & line 9
 
 Replace to your discord server webhook link
 >替換成你的伺服器 webhook 連結
@@ -70,7 +70,7 @@ The following relation table is for reference.
 |`https://www.ptt.cc/atom/PC_Shopping.xml`|`https://discord.com/api/webhooks/...AccountidA`|
 |`https://www.ptt.cc/atom/HardwareSale.xml`|`https://discord.com/api/webhooks/...Accountidb`|
 
-#### line 53
+#### line 49
 Change webhook post content to your style
 >修改 webhook 傳送內容成你的風格
 
