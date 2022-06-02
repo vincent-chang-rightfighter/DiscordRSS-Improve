@@ -40,7 +40,8 @@ def main(Webhookurl: str, RssUrl: str):
             embed = Embed()
             embed.title = Title
             embed.colour = Colour.dark_gray()
-            embed.description = description[5:len(description)-7]
+            embed.description = description[5:len(
+                description)-7].replace("*", "\*")
             embed.timestamp = datetime.now(timezone(timedelta(hours=+8)))
             embed.set_author(name=Provider+" ( "+Author+" )")
             embed.set_footer(text='Powered by vincent-chang-rightfighter/DiscordRSS-Improve',
