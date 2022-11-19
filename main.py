@@ -1,5 +1,7 @@
 import feedparser
+import requests
 import sqlite3
+import time
 from discord import Webhook, RequestsWebhookAdapter, Embed, Colour
 from datetime import datetime, timezone, timedelta
 
@@ -10,9 +12,19 @@ PTTRssUrl = ['https://www.ptt.cc/atom/PC_Shopping.xml',
              'https://www.ptt.cc/atom/HardwareSale.xml']
 
 
-def build_webhook(Webhookurl):
-    webhook = Webhook.from_url(Webhookurl, adapter=RequestsWebhookAdapter())
-    return webhook
+def req_webhook(webHookUrl: str, DATA: dict, URL: str):
+    try:
+        time.sleep(5)
+        SendToDC = requests.post(
+            webHookUrl, json=DATA)
+        if 200 <= SendToDC.status_code < 300:
+            print(
+                f"Send Webhook {str(URL)}\nStatus:{SendToDC.status_code}")
+        else:
+            print(
+                f"Send Webhook {str(URL)}\nStatus:{SendToDC.status_code}, response:\n{SendToDC.json()}")
+    except Exception as e:
+        print(e)
 
 
 def main(Webhookurl: str, RssUrl: str):
@@ -20,7 +32,6 @@ def main(Webhookurl: str, RssUrl: str):
     cur = con.cursor()
     cur.execute(
         '''CREATE TABLE IF NOT EXISTS Stuff(url TEXT PRIMARY KEY NOT NULL)''')
-    webhook = build_webhook(Webhookurl)
     data = feedparser.parse(RssUrl)
     Provider = data.feed.title
     for i in data.entries:
@@ -36,18 +47,24 @@ def main(Webhookurl: str, RssUrl: str):
             cur.execute(
                 "INSERT INTO Stuff VALUES(?)", [hyperLink])
             con.commit()
-            print("Not exist. Send webhook\n"+str(hyperLink))
-            embed = Embed()
-            embed.title = Title
-            embed.colour = Colour.dark_gray()
-            embed.description = description[5:len(
-                description)-7].replace("*", "\*")
-            embed.timestamp = datetime.now(timezone(timedelta(hours=+8)))
-            embed.set_author(name=Provider+" ( "+Author+" )")
-            embed.set_footer(text='Powered by vincent-chang-rightfighter/DiscordRSS-Improve',
-                             icon_url='https://raw.githubusercontent.com/vincent-chang-rightfighter/DiscordWebhook-InstagramUrl/main/icon.png')
-            webhook.send(
-                content=f"{Title}\n{hyperLink}", embed=embed)
+            time_now = datetime.now(timezone(timedelta(hours=+8))).isoformat()
+            embed = {
+                "description":  description[5:len(description)-7].replace("*", "\*"),
+                "title": Title,
+                "timestamp": time_now,
+                "color": 0x546e7a,
+                "author": {
+                    "name": Provider+" ( "+Author+" )",
+                },
+                "footer": {
+                    "text": "Powered by vincent-chang-rightfighter/DiscordRSS-Improve",
+                    "icon_url": "https://raw.githubusercontent.com/vincent-chang-rightfighter/DiscordWebhook-InstagramUrl/main/icon.png"
+                },
+            }
+            data = {"content": f"{Title}\n{hyperLink}",
+                    "embeds": [embed], }
+            req_webhook(Webhookurl, data, hyperLink)
+
         else:
             print("Yep exists")
     con.close()
