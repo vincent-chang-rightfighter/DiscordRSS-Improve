@@ -2,7 +2,6 @@ import feedparser
 import requests
 import sqlite3
 import time
-from discord import Webhook, RequestsWebhookAdapter, Embed, Colour
 from datetime import datetime, timezone, timedelta
 
 webHookUrl = ['https://discord.com/api/webhooks/...AccountidA',
